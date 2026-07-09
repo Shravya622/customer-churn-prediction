@@ -17,8 +17,7 @@ mlflow.db
 models/*.pkl
 models/*.joblib
 
-# Processed data and generated artifacts
-data/processed/
+# generated artifacts
 artifacts/
 
 # Environment secrets
