@@ -1,0 +1,30 @@
+# Virtual environment
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# MLflow local data
+mlruns/
+mlflow.db
+
+# Model files
+models/*.pkl
+models/*.joblib
+
+# Processed data and generated artifacts
+data/processed/
+artifacts/
+
+# Environment secrets
+.env
+
+# OS and editor files
+.vscode/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,12 @@
+venv/
+.venv/
+.git/
+__pycache__/
+.ipynb_checkpoints/
+mlruns/
+mlflow.db
+artifacts/
+data/processed/
+tests/
+*.ipynb
+.env
