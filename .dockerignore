@@ -10,3 +10,4 @@ data/processed/
 tests/
 *.ipynb
 .env
+registered_model/

@@ -17,11 +17,20 @@ mlflow.db
 models/*.pkl
 models/*.joblib
 
-# generated artifacts
+# Registered/local model artifacts
+registered_model/
+
+# Generated artifacts
 artifacts/
 
 # Environment secrets
 .env
+
+# Deployment packages
+*.zip
+
+# Logs
+*.log
 
 # OS and editor files
 .vscode/

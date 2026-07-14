@@ -1,21 +1,25 @@
 from pathlib import Path
-import joblib
+
+import mlflow.sklearn
 import pandas as pd
 
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from app.s3_utils import download_model_from_s3
 
-# Paths are built relative to this file, so the API works from the project folder.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
-MODEL_PATH = BASE_DIR / "models" / "best_churn_model.pkl"
-THRESHOLD_PATH = BASE_DIR / "models" / "model_threshold.txt"
+MODEL_DIR = BASE_DIR / "registered_model"
 
-# Load the trained pipeline and selected business threshold once when the API starts.
-model = joblib.load(MODEL_PATH)
+# Download the registered model from S3 if it is not available locally.
+if not MODEL_DIR.exists():
+    download_model_from_s3(MODEL_DIR)
 
-with open(THRESHOLD_PATH, "r") as file:
-    CHURN_THRESHOLD = float(file.read().strip())
+# Load the MLflow model.
+model = mlflow.sklearn.load_model(str(MODEL_DIR))
+
+CHURN_THRESHOLD = 0.40
 
 
 app = FastAPI(
@@ -60,13 +64,13 @@ def health_check():
     return {
         "status": "healthy",
         "model": "Logistic Regression",
+        "model_source": "MLflow model from S3",
         "churn_threshold": CHURN_THRESHOLD
     }
 
 
 @app.post("/predict")
 def predict_churn(customer: CustomerData):
-    # Convert the validated request into one-row DataFrame for the ML pipeline.
     customer_df = pd.DataFrame([customer.model_dump()])
 
     churn_probability = float(model.predict_proba(customer_df)[:, 1][0])
